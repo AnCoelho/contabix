@@ -8,6 +8,7 @@ import com.projeto.contabix.repository.UsuarioRepository;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +27,8 @@ public class AuthService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    private String jwtSecret = "contabix2024";
+    @Value("${jwt.secret}")
+    private String jwtSecret;
 
     public Usuario registrarUsuario(RegisterRequest request) {
         Usuario usuario = new Usuario();

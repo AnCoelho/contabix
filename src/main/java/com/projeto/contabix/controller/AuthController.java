@@ -1,5 +1,6 @@
 package com.projeto.contabix.controller;
 
+import com.projeto.contabix.model.dto.LoginRequest;
 import com.projeto.contabix.model.dto.RegisterRequest;
 import com.projeto.contabix.model.entity.Usuario;
 import com.projeto.contabix.service.AuthService;
@@ -19,5 +20,12 @@ public class AuthController {
         Usuario usuario = authService.registrarUsuario(request);
         return ResponseEntity.ok(usuario);
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody LoginRequest request) {
+        String token = authService.autenticarUsuario(request);
+        return ResponseEntity.ok(token);
+    }
+
 
 }
