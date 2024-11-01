@@ -4,12 +4,8 @@ import java.time.LocalDateTime;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import jakarta.persistence.*;
-import java.util.Date;
 
 import javax.persistence.Entity;
-
-import com.projeto.contabix.data.dto.TipoUsuarioDTO;
-import com.projeto.contabix.data.entity.TipoUsuarioEntity;
 
 
 @ApiModel(description = "TABELA USUARIOS.")
@@ -35,13 +31,25 @@ public class UsuariosEntity {
     private String senha;
 
     @ManyToOne
-    @JoinColumn(name = "ID_TIPO_USUARIO")
-    private TipoUsuarioEntity idTipoUsuario;
+    @Column(name = "IS_CLIENTE")
+    private boolean isCliente;
 
     @Column(name = "ATIVO")
     private boolean ativo;
 
     @Column(name = "DATA_CRIACAO")
     private LocalDateTime dataCriacao = LocalDateTime.now();
+
+    // Construtor para email
+    public UsuariosEntity(String nome, String emailOrCnpj, String senha, boolean isCliente) {
+        this.nome = nome;
+        if (isCliente) {
+            this.cnpj = emailOrCnpj;
+        } else {
+            this.email = emailOrCnpj;
+        }
+        this.senha = senha;
+        this.isCliente = isCliente;
+    }
 
 }

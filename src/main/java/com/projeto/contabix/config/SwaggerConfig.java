@@ -1,4 +1,4 @@
-package br.poo.unipac.uberlandia.ematriculasserver.config;
+package com.projeto.contabix.config;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;

@@ -1,4 +1,4 @@
-package br.poo.unipac.uberlandia.ematriculasserver.config;
+package com.projeto.contabix.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;

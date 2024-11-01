@@ -1,5 +1,4 @@
-package br.poo.unipac.uberlandia.ematriculasserver.exception;
-
+package com.projeto.contabix.exception;
 public class BadRequestException extends RuntimeException {
 
     private String code;

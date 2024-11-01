@@ -1,4 +1,4 @@
-package br.poo.unipac.uberlandia.ematriculasserver.exception;
+package com.projeto.contabix.exception;
 
 public class NotFoundException extends RuntimeException {
 

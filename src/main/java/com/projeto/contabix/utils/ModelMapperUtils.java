@@ -1,4 +1,4 @@
-package br.poo.unipac.uberlandia.ematriculasserver.utils;
+package com.projeto.contabix.utils;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
