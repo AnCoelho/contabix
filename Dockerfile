@@ -1,15 +1,9 @@
-FROM maven:3.8.4-openjdk-17 AS build
-
+FROM maven:3.8.6-amazoncorretto-17 as build
 WORKDIR /app
-
 COPY . .
+RUN mvn clean package -X -DskipTests
 
-RUN ./mvnw clean package -DskipTests
-
-FROM openjdk:17-slim
-
-COPY --from=build /app/target/*.jar app.jar
-
-EXPOSE 8080
-
-ENTRYPOINT ["java", "-jar", "/app.jar"]
+FROM openjdk:17-ea-10-jdk-slim
+WORKDIR /app
+COPY --from=build ./app/target/*.jar ./springdeskcurso.jar
+ENTRYPOINT java -jar springdeskcurso.jar
