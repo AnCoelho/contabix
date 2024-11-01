@@ -35,8 +35,8 @@ public class UsuariosEntity {
     private String senha;
 
     @ManyToOne
-    @JoinColumn(name = "id_tipo_usuario")
-    private TipoUsuario tipoUsuario;
+    @JoinColumn(name = "ID_TIPO_USUARIO")
+    private TipoUsuarioEntity idTipoUsuario;
 
     @Column(name = "ATIVO")
     private boolean ativo;

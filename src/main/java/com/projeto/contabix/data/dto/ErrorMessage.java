@@ -1,4 +1,4 @@
-package br.poo.unipac.uberlandia.ematriculasserver.data.dto;
+package com.projeto.contabix.data.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
