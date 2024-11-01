@@ -30,7 +30,6 @@ public class UsuariosEntity {
     @Column(name = "SENHA", length = 100)
     private String senha;
 
-    @ManyToOne
     @Column(name = "IS_CLIENTE")
     private boolean isCliente;
 
@@ -40,7 +39,7 @@ public class UsuariosEntity {
     @Column(name = "DATA_CRIACAO")
     private LocalDateTime dataCriacao = LocalDateTime.now();
 
-    // Construtor para email
+    // Construtor
     public UsuariosEntity(String nome, String emailOrCnpj, String senha, boolean isCliente) {
         this.nome = nome;
         if (isCliente) {

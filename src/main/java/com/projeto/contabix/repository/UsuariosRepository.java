@@ -11,11 +11,6 @@ import java.util.Optional;
 @Repository
 public interface UsuariosRepository extends JpaRepository<UsuariosEntity, Long> {
 
-    @Query(value = "SELECT COUNT(1) FROM public.USUARIOS WHERE CPF = :cpf", nativeQuery = true)
-    Long verificaDuplicidadeUsuario(@Param("cpf") String cpf);
-
-    @Query(value = "SELECT COUNT(1) FROM public.USUARIOS WHERE CNPJ = :cnpj", nativeQuery = true)
-    Long verificaDuplicidadeUsuarios(@Param("cnpj") String cnpj);
 
     Optional<UsuariosEntity> findByEmailAndSenha(String email, String senha);
     Optional<UsuariosEntity> findByCnpjAndSenha(String cnpj, String senha);

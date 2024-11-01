@@ -1,7 +1,10 @@
 package com.projeto.contabix.exception;
 
+import lombok.Getter;
+
 public class NotFoundException extends RuntimeException {
 
+    @Getter
     private String code;
 
     private String message;
@@ -9,10 +12,6 @@ public class NotFoundException extends RuntimeException {
     public NotFoundException(String code, String message) {
         this.code = code;
         this.message = message;
-    }
-
-    public String getCode() {
-        return code;
     }
 
     @Override
