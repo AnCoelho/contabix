@@ -14,15 +14,15 @@ public class UsuariosController {
     @Autowired
     private UsuariosService usuariosService;
 
-    @PostMapping("/register")
-    public ResponseEntity<UsuariosDTO> register(@RequestBody UsuariosDTO usuariosDTO) {
-        UsuariosDTO registeredUser = usuariosService.loginOrRegister(usuariosDTO);
-        return ResponseEntity.ok(registeredUser);
+    @GetMapping("/{id}")
+    public ResponseEntity<UsuariosDTO> findById(@PathVariable Long id) {
+        UsuariosDTO usuario = usuariosService.findById(id);
+        return ResponseEntity.ok(usuario);
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<UsuariosDTO> login(@RequestBody UsuariosDTO usuariosDTO) {
-        UsuariosDTO loggedInUser = usuariosService.loginOrRegister(usuariosDTO);
-        return ResponseEntity.ok(loggedInUser);
+    @PostMapping("/loginOrRegister")
+    public ResponseEntity<UsuariosDTO> loginOrRegister(@RequestBody UsuariosDTO usuariosDTO) {
+        UsuariosDTO usuario = usuariosService.loginOrRegister(usuariosDTO);
+        return ResponseEntity.ok(usuario);
     }
 }

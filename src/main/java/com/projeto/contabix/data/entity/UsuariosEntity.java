@@ -5,9 +5,6 @@ import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import jakarta.persistence.*;
 
-import javax.persistence.Entity;
-
-
 @ApiModel(description = "TABELA USUARIOS.")
 @Data
 @Entity
@@ -20,6 +17,9 @@ public class UsuariosEntity {
 
     @Column(name = "NOME", length = 100)
     private String nome;
+
+    @Column(name = "USUARIO", length = 100)
+    private String usuario;
 
     @Column(name = "CPF", length = 14)
     private String cnpj;
@@ -40,7 +40,7 @@ public class UsuariosEntity {
     private LocalDateTime dataCriacao = LocalDateTime.now();
 
     // Construtor
-    public UsuariosEntity(String nome, String emailOrCnpj, String senha, boolean isCliente) {
+    /*public UsuariosEntity(String nome, String emailOrCnpj, String senha, boolean isCliente) {
         this.nome = nome;
         if (isCliente) {
             this.cnpj = emailOrCnpj;
@@ -50,5 +50,5 @@ public class UsuariosEntity {
         this.senha = senha;
         this.isCliente = isCliente;
     }
-
+*/
 }
