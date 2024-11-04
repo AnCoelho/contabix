@@ -30,14 +30,12 @@ public class UsuariosEntity {
     @Column(name = "SENHA", length = 100)
     private String senha;
 
-    @Column(name = "IS_CLIENTE")
-    private boolean isCliente;
-
     @Column(name = "ATIVO")
     private boolean ativo;
 
     @Column(name = "DATA_CRIACAO")
     private LocalDateTime dataCriacao = LocalDateTime.now();
+
 
     // Construtor
     /*public UsuariosEntity(String nome, String emailOrCnpj, String senha, boolean isCliente) {
