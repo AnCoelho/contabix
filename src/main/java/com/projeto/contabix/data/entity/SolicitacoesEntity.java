@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Getter
@@ -28,7 +29,7 @@ public class SolicitacoesEntity {
 
     private String servico;
     private String urgencia;
-    private String prazo;
+    private Timestamp prazo;
     private String assunto;
     private String descricao;
     private String status;
