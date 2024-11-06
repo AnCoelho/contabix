@@ -1,12 +1,15 @@
 package com.projeto.contabix.data.entity;
 
-import java.time.LocalDateTime;
-import io.swagger.annotations.ApiModel;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import jakarta.persistence.*;
+import lombok.NoArgsConstructor;
 
-@ApiModel(description = "TABELA USUARIOS.")
+import jakarta.persistence.*;
+import java.time.LocalDateTime;
+
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "USUARIOS", schema = "PUBLIC")
 public class UsuariosEntity {
@@ -27,9 +30,13 @@ public class UsuariosEntity {
     @Column(name = "SENHA", length = 100)
     private String senha;
 
-    @Column(name = "ATIVO")
-    private boolean ativo;
+    @ManyToOne
+    @JoinColumn(name = "ID_TIPO_USUARIO")
+    private TipoUsuarioEntity tipoUsuario;
 
     @Column(name = "DATA_CRIACAO")
-    private LocalDateTime dataCriacao = LocalDateTime.now();
+    private LocalDateTime dataCriacao;
+
+    @Column(name = "ATIVO")
+    private boolean ativo;
 }
