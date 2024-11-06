@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Setter
 @Data
 @Entity
-@Table(name = "solicitacoes")
+@Table(name = "SOLICITACOES")
 public class SolicitacoesEntity {
 
     @Id
@@ -20,11 +20,11 @@ public class SolicitacoesEntity {
     private Long idSolicitacao;
 
     @ManyToOne
-    @JoinColumn(name = "id_cliente", nullable = false)
+    @JoinColumn(name = "ID_CLIENTE", nullable = false)
     private UsuariosEntity idCliente;
 
     @ManyToOne
-    @JoinColumn(name = "id_contador", nullable = true)
+    @JoinColumn(name = "ID_CONTADOR", nullable = true)
     private UsuariosEntity idContador;
 
     private String servico;
@@ -34,6 +34,6 @@ public class SolicitacoesEntity {
     private String descricao;
     private String status;
 
-    @Column(name = "data_abertura")
+    @Column(name = "DATA_ABERTURA")
     private LocalDateTime dataAbertura;
 }
