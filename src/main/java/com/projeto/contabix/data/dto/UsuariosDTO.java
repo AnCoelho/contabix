@@ -11,10 +11,10 @@ import java.time.LocalDateTime;
 public class UsuariosDTO {
     private Long idUsuario;
     private String nome;
-    private String usuario;
     private String cnpj;
     private String email;
     private String senha;
-    private boolean ativo;
+    private Long idTipoUsuario;
     private LocalDateTime dataCriacao;
+    private boolean ativo;
 }
