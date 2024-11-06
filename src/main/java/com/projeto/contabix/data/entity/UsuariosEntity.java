@@ -18,7 +18,7 @@ public class UsuariosEntity {
     @Column(name = "NOME", length = 100)
     private String nome;
 
-    @Column(name = "CPF", length = 14)
+    @Column(name = "CNPJ", length = 14)
     private String cnpj;
 
     @Column(name = "EMAIL", length = 100)
