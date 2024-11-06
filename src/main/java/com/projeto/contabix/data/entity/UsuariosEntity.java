@@ -12,14 +12,11 @@ import jakarta.persistence.*;
 public class UsuariosEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID_USUARIOS")
+    @Column(name = "ID_USUARIO")
     private Long idUsuario;
 
     @Column(name = "NOME", length = 100)
     private String nome;
-
-    @Column(name = "USUARIO", length = 100)
-    private String usuario;
 
     @Column(name = "CPF", length = 14)
     private String cnpj;
@@ -35,18 +32,4 @@ public class UsuariosEntity {
 
     @Column(name = "DATA_CRIACAO")
     private LocalDateTime dataCriacao = LocalDateTime.now();
-
-
-    // Construtor
-    /*public UsuariosEntity(String nome, String emailOrCnpj, String senha, boolean isCliente) {
-        this.nome = nome;
-        if (isCliente) {
-            this.cnpj = emailOrCnpj;
-        } else {
-            this.email = emailOrCnpj;
-        }
-        this.senha = senha;
-        this.isCliente = isCliente;
-    }
-*/
 }
