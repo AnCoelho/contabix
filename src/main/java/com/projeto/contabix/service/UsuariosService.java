@@ -4,6 +4,7 @@ import com.projeto.contabix.data.dto.UsuariosDTO;
 import com.projeto.contabix.data.entity.UsuariosEntity;
 import com.projeto.contabix.data.entity.TipoUsuarioEntity;
 import com.projeto.contabix.exception.NotFoundException;
+import com.projeto.contabix.exception.BusinessException;
 import com.projeto.contabix.repository.UsuariosRepository;
 import com.projeto.contabix.repository.TipoUsuarioRepository;
 import com.projeto.contabix.utils.ModelMapperUtils;
@@ -37,12 +38,10 @@ public class UsuariosService {
         String cnpj = usuariosDTO.getCnpj();
         String senha = usuariosDTO.getSenha();
 
-        logger.info("Validando usuário: " + (email != null ? email : cnpj));
-
         if (email != null && !email.isEmpty()) {
             return handleLoginOrRegisterWithEmail(email, senha, usuariosDTO);
         } else if (cnpj != null && !cnpj.isEmpty()) {
-            usuariosDTO.setCnpj(removeSpecialCharacters(cnpj)); // Remove caracteres especiais do CNPJ
+            usuariosDTO.setCnpj(removeSpecialCharacters(cnpj)); 
             return handleLoginOrRegisterWithCnpj(cnpj, senha, usuariosDTO);
         } else {
             throw new IllegalArgumentException("Usuário inválido");
@@ -51,7 +50,7 @@ public class UsuariosService {
 
     
     private String removeSpecialCharacters(String value) {
-        return value.replaceAll("[^\\d]", ""); // Remove todos os caracteres que não são dígitos
+        return value.replaceAll("[^\\d]", ""); 
     }
 
     private UsuariosDTO handleLoginOrRegisterWithEmail(String email, String senha, UsuariosDTO usuariosDTO) {
@@ -80,6 +79,9 @@ public class UsuariosService {
             if (usuariosDTO.getNome() == null || usuariosDTO.getNome().isEmpty()) {
                 throw new IllegalArgumentException("Nome não pode ser nulo ou vazio");
             }
+            if (!cnpj.matches("\\d+")) {
+                throw new IllegalArgumentException("CNPJ deve conter apenas números");
+            }
             usuariosDTO.setAtivo(true);
             usuariosDTO.setDataCriacao(LocalDateTime.now());
             TipoUsuarioEntity tipoUsuario = getTipoUsuario(usuariosDTO.getIdTipoUsuario());
@@ -93,20 +95,36 @@ public class UsuariosService {
     private UsuariosDTO loginWithEmail(String email, String senha) {
         Optional<UsuariosEntity> usuario = usuariosRepository.findByEmailAndSenha(email, senha);
         if (usuario.isPresent()) {
-            UsuariosDTO responseDTO = ModelMapperUtils.map(usuario.get(), new UsuariosDTO());
+            UsuariosEntity usuarioEntity = usuario.get();
+            UsuariosDTO responseDTO = new UsuariosDTO();
+            responseDTO.setIdUsuario(usuarioEntity.getIdUsuario());
+            responseDTO.setNome(usuarioEntity.getNome());
+            responseDTO.setEmail(usuarioEntity.getEmail());
+            responseDTO.setSenha(usuarioEntity.getSenha());
+            responseDTO.setIdTipoUsuario(usuarioEntity.getTipoUsuario().getIdTipoUsuario());
+            responseDTO.setDataCriacao(usuarioEntity.getDataCriacao());
+            responseDTO.setAtivo(usuarioEntity.isAtivo());
             return responseDTO;
         } else {
-            throw new IllegalArgumentException("Usuário ou senha incorretos");
+            throw new BusinessException("SENHA_INCORRETA", "Senha incorreta!");
         }
     }
 
     private UsuariosDTO loginWithCnpj(String cnpj, String senha) {
         Optional<UsuariosEntity> usuario = usuariosRepository.findByCnpjAndSenha(cnpj, senha);
         if (usuario.isPresent()) {
-            UsuariosDTO responseDTO = ModelMapperUtils.map(usuario.get(), new UsuariosDTO());
+            UsuariosEntity usuarioEntity = usuario.get();
+            UsuariosDTO responseDTO = new UsuariosDTO();
+            responseDTO.setIdUsuario(usuarioEntity.getIdUsuario());
+            responseDTO.setCnpj(usuarioEntity.getCnpj());
+            responseDTO.setSenha(usuarioEntity.getSenha());
+            responseDTO.setNome(usuarioEntity.getNome());
+            responseDTO.setIdTipoUsuario(usuarioEntity.getTipoUsuario().getIdTipoUsuario());
+            responseDTO.setDataCriacao(usuarioEntity.getDataCriacao());
+            responseDTO.setAtivo(usuarioEntity.isAtivo());
             return responseDTO;
         } else {
-            throw new IllegalArgumentException("Usuário ou senha incorretos");
+            throw new BusinessException("SENHA_INCORRETA", "Senha incorreta!");
         }
     }
 
