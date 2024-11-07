@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
-import java.sql.Timestamp;
 
 @Data
 @NoArgsConstructor
@@ -15,7 +14,7 @@ public class SolicitacoesDTO {
     private Long idContador;
     private String servico;
     private String urgencia;
-    private Timestamp prazo;
+    private LocalDateTime prazo;
     private String assunto;
     private String descricao;
     private String status;

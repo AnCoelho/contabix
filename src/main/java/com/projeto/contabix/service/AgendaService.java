@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.projeto.contabix.data.dto.AgendaDTO;
 import com.projeto.contabix.data.dto.UsuariosDTO;
 import com.projeto.contabix.data.entity.AgendaEntity;
+import com.projeto.contabix.data.entity.UsuariosEntity;
 import com.projeto.contabix.exception.BusinessException;
 import com.projeto.contabix.exception.NotFoundException;
 import com.projeto.contabix.repository.AgendaRepository;
@@ -38,7 +39,7 @@ public class AgendaService {
 
     @Transactional
     public List<AgendaDTO> getEventsNotifications(UsuariosDTO usuariosDTO) {
-        List<AgendaEntity> notifications = agendaRepository.findAllByNotificadoAndDestinatarioId(false, usuariosDTO.getIdUsuario());
+        List<AgendaEntity> notifications = agendaRepository.findAllByNotificadoAndSolicitante(false, ModelMapperUtils.map(usuariosDTO, new UsuariosEntity()));
         if (notifications.isEmpty()) {
             throw new BusinessException("SEM_NOTIFICACOES", "Você não possui nenhuma notificação no momento");
         }
