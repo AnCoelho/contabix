@@ -11,14 +11,10 @@ import com.projeto.contabix.utils.ModelMapperUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
-import java.util.logging.Logger;
 
 @Service
 public class UsuariosService {
-
-    private static final Logger logger = Logger.getLogger(UsuariosService.class.getName());
 
     @Autowired
     private UsuariosRepository usuariosRepository;
@@ -28,104 +24,48 @@ public class UsuariosService {
 
     public UsuariosDTO findById(Long id) {
         UsuariosEntity usuariosEntity = usuariosRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("ACESSO_USUARIOS_NOT_FOUND", "Acesso Usuários não encontrado."));
+                .orElseThrow(
+                        () -> new NotFoundException("ACESSO_USUARIOS_NOT_FOUND", "Acesso Usuários não encontrado."));
 
         return ModelMapperUtils.map(usuariosEntity, new UsuariosDTO());
     }
 
     public UsuariosDTO loginOrRegister(UsuariosDTO usuariosDTO) {
-        String email = usuariosDTO.getEmail();
-        String cnpj = usuariosDTO.getCnpj();
-        String senha = usuariosDTO.getSenha();
+        if (usuariosDTO.getNome() != null && usuariosDTO.getIdTipoUsuario() != null && usuariosDTO.getSenha() != null) {
+            UsuariosEntity usuariosEntity = ModelMapperUtils.map(usuariosDTO, new UsuariosEntity());
+            TipoUsuarioEntity tipoUsuarioEntity = getTipoUsuario(usuariosDTO.getIdTipoUsuario());
+            usuariosEntity.setTipoUsuario(tipoUsuarioEntity);
+            usuariosRepository.save(usuariosEntity);
 
-        if (email != null && !email.isEmpty()) {
-            return handleLoginOrRegisterWithEmail(email, senha, usuariosDTO);
-        } else if (cnpj != null && !cnpj.isEmpty()) {
-            usuariosDTO.setCnpj(removeSpecialCharacters(cnpj)); 
-            return handleLoginOrRegisterWithCnpj(cnpj, senha, usuariosDTO);
+            return ModelMapperUtils.map(usuariosEntity, new UsuariosDTO());
         } else {
-            throw new IllegalArgumentException("Usuário inválido");
-        }
-    }
+            if (usuariosDTO.getCnpj() != null) {
+                Optional<UsuariosEntity> user = usuariosRepository.findByCnpj(usuariosDTO.getCnpj());
+                if (!user.isPresent()) {
+                    throw new BusinessException("CNPJ_NAO_ENCONTRADO",
+                            "Esse usuário não existe, por favor, faça o cadastro!");
+                }
 
-    
-    private String removeSpecialCharacters(String value) {
-        return value.replaceAll("[^\\d]", ""); 
-    }
+                if (!usuariosDTO.getSenha().equals(user.get().getSenha())) {
+                    throw new BusinessException("SENHA_INCORRETA", "A senha está incorreta!");
+                }
 
-    private UsuariosDTO handleLoginOrRegisterWithEmail(String email, String senha, UsuariosDTO usuariosDTO) {
-        Optional<UsuariosEntity> usuario = usuariosRepository.findByEmail(email);
-        if (usuario.isPresent()) {
-            return loginWithEmail(email, senha);
-        } else {
-            if (usuariosDTO.getNome() == null || usuariosDTO.getNome().isEmpty()) {
-                throw new IllegalArgumentException("Nome não pode ser nulo ou vazio");
+                return ModelMapperUtils.map(user.get(), new UsuariosDTO());
+            } else if (usuariosDTO.getEmail() != null) {
+                Optional<UsuariosEntity> user = usuariosRepository.findByEmail(usuariosDTO.getEmail());
+                if (!user.isPresent()) {
+                    throw new BusinessException("EMAIL_NAO_ENCONTRADO",
+                            "Esse usuário não existe, por favor, faça o cadastro!");
+                }
+
+                if (!usuariosDTO.getSenha().equals(user.get().getSenha())) {
+                    throw new BusinessException("SENHA_INCORRETA", "A senha está incorreta!");
+                }
+
+                return ModelMapperUtils.map(user.get(), new UsuariosDTO());
             }
-            usuariosDTO.setAtivo(true);
-            usuariosDTO.setDataCriacao(LocalDateTime.now());
-            TipoUsuarioEntity tipoUsuario = getTipoUsuario(usuariosDTO.getIdTipoUsuario());
-            UsuariosEntity newUsuario = ModelMapperUtils.map(usuariosDTO, new UsuariosEntity());
-            newUsuario.setTipoUsuario(tipoUsuario);
-            usuariosRepository.save(newUsuario);
-            return ModelMapperUtils.map(newUsuario, new UsuariosDTO());
         }
-    }
-    
-    private UsuariosDTO handleLoginOrRegisterWithCnpj(String cnpj, String senha, UsuariosDTO usuariosDTO) {
-        Optional<UsuariosEntity> usuario = usuariosRepository.findByCnpj(cnpj);
-        if (usuario.isPresent()) {
-            return loginWithCnpj(cnpj, senha);
-        } else {
-            if (usuariosDTO.getNome() == null || usuariosDTO.getNome().isEmpty()) {
-                throw new IllegalArgumentException("Nome não pode ser nulo ou vazio");
-            }
-            if (!cnpj.matches("\\d+")) {
-                throw new IllegalArgumentException("CNPJ deve conter apenas números");
-            }
-            usuariosDTO.setAtivo(true);
-            usuariosDTO.setDataCriacao(LocalDateTime.now());
-            TipoUsuarioEntity tipoUsuario = getTipoUsuario(usuariosDTO.getIdTipoUsuario());
-            UsuariosEntity newUsuario = ModelMapperUtils.map(usuariosDTO, new UsuariosEntity());
-            newUsuario.setTipoUsuario(tipoUsuario);
-            usuariosRepository.save(newUsuario);
-            return ModelMapperUtils.map(newUsuario, new UsuariosDTO());
-        }
-    }
-
-    private UsuariosDTO loginWithEmail(String email, String senha) {
-        Optional<UsuariosEntity> usuario = usuariosRepository.findByEmailAndSenha(email, senha);
-        if (usuario.isPresent()) {
-            UsuariosEntity usuarioEntity = usuario.get();
-            UsuariosDTO responseDTO = new UsuariosDTO();
-            responseDTO.setIdUsuario(usuarioEntity.getIdUsuario());
-            responseDTO.setNome(usuarioEntity.getNome());
-            responseDTO.setEmail(usuarioEntity.getEmail());
-            responseDTO.setSenha(usuarioEntity.getSenha());
-            responseDTO.setIdTipoUsuario(usuarioEntity.getTipoUsuario().getIdTipoUsuario());
-            responseDTO.setDataCriacao(usuarioEntity.getDataCriacao());
-            responseDTO.setAtivo(usuarioEntity.isAtivo());
-            return responseDTO;
-        } else {
-            throw new BusinessException("SENHA_INCORRETA", "Senha incorreta!");
-        }
-    }
-
-    private UsuariosDTO loginWithCnpj(String cnpj, String senha) {
-        Optional<UsuariosEntity> usuario = usuariosRepository.findByCnpjAndSenha(cnpj, senha);
-        if (usuario.isPresent()) {
-            UsuariosEntity usuarioEntity = usuario.get();
-            UsuariosDTO responseDTO = new UsuariosDTO();
-            responseDTO.setIdUsuario(usuarioEntity.getIdUsuario());
-            responseDTO.setCnpj(usuarioEntity.getCnpj());
-            responseDTO.setSenha(usuarioEntity.getSenha());
-            responseDTO.setNome(usuarioEntity.getNome());
-            responseDTO.setIdTipoUsuario(usuarioEntity.getTipoUsuario().getIdTipoUsuario());
-            responseDTO.setDataCriacao(usuarioEntity.getDataCriacao());
-            responseDTO.setAtivo(usuarioEntity.isAtivo());
-            return responseDTO;
-        } else {
-            throw new BusinessException("SENHA_INCORRETA", "Senha incorreta!");
-        }
+        throw new BusinessException("ERRO_INESPERADO", "Houve um erro inesperado!");
     }
 
     private TipoUsuarioEntity getTipoUsuario(Long idTipoUsuario) {
@@ -133,4 +73,3 @@ public class UsuariosService {
                 .orElseThrow(() -> new NotFoundException("TIPO_USUARIO_NOT_FOUND", "Tipo de Usuário não encontrado."));
     }
 }
-
