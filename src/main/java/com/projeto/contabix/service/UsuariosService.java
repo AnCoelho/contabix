@@ -11,6 +11,7 @@ import com.projeto.contabix.utils.ModelMapperUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -31,10 +32,11 @@ public class UsuariosService {
     }
 
     public UsuariosDTO loginOrRegister(UsuariosDTO usuariosDTO) {
-        if (usuariosDTO.getNome() != null && usuariosDTO.getIdTipoUsuario() != null && usuariosDTO.getSenha() != null) {
+        if (usuariosDTO.getNome() != null && usuariosDTO.getTipoUsuario() != null && usuariosDTO.getSenha() != null) {
             UsuariosEntity usuariosEntity = ModelMapperUtils.map(usuariosDTO, new UsuariosEntity());
-            TipoUsuarioEntity tipoUsuarioEntity = getTipoUsuario(usuariosDTO.getIdTipoUsuario());
-            usuariosEntity.setTipoUsuario(tipoUsuarioEntity);
+            LocalDateTime localDateTime = LocalDateTime.now();
+            usuariosEntity.setAtivo(true);
+            usuariosEntity.setDataCriacao(localDateTime);
             usuariosRepository.save(usuariosEntity);
 
             return ModelMapperUtils.map(usuariosEntity, new UsuariosDTO());

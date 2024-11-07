@@ -14,7 +14,7 @@ public class UsuariosDTO {
     private String cnpj;
     private String email;
     private String senha;
-    private Long idTipoUsuario;
+    private TipoUsuarioDTO tipoUsuario;
     private LocalDateTime dataCriacao;
     private boolean ativo;
 }
