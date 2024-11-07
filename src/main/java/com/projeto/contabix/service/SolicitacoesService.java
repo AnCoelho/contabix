@@ -18,9 +18,9 @@ public class SolicitacoesService {
     private SolicitacoesRepository solicitacoesRepository;
 
     public SolicitacoesDTO createSolicitacao(SolicitacoesDTO solicitacoesDTO) {
-        SolicitacoesEntity solicitacoesEntity = ModelMapperUtils.map(solicitacoesDTO, new SolicitacoesEntity());
+        SolicitacoesEntity solicitacoesEntity = ModelMapperUtils.map(solicitacoesDTO, SolicitacoesEntity.class);
         solicitacoesEntity = solicitacoesRepository.save(solicitacoesEntity);
-        return ModelMapperUtils.map(solicitacoesEntity, new SolicitacoesDTO());
+        return ModelMapperUtils.map(solicitacoesEntity, SolicitacoesDTO.class);
     }
 
     public List<SolicitacoesDTO> getSolicitacoesByCliente(UsuariosEntity idCliente) {

@@ -28,4 +28,8 @@ public class ModelMapperUtils {
                 .collect(Collectors.toList());
     }
 
+    public static <D, T> D map(final T entity, Class<D> outClass) {
+        return defaultModelMapper.map(entity, outClass);
+    }
+
 }
