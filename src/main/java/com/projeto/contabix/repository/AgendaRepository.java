@@ -13,4 +13,6 @@ import com.projeto.contabix.data.entity.AgendaEntity;
 public interface AgendaRepository extends JpaRepository<AgendaEntity, Long> {
     @Query("SELECT a FROM AgendaEntity a WHERE EXTRACT(MONTH FROM a.dataEvento) = :mes AND EXTRACT(YEAR FROM a.dataEvento) = :ano")
     List<AgendaEntity> findAllByMonthAndYear(@Param("mes") Long mes, @Param("ano") Long ano);
+
+    List<AgendaEntity> findAllByNotificadoAndDestinatarioId(boolean notificado, Long idDestinatario);
 }

@@ -11,23 +11,23 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "USUARIOS")
+@Table(name = "USUARIOS", schema = "PUBLIC")
 public class UsuariosEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID_USUARIO")
     private Long idUsuario;
 
-    @Column(name = "NOME")
+    @Column(name = "NOME", length = 100)
     private String nome;
 
-    @Column(name = "CNPJ")
+    @Column(name = "CNPJ", length = 14)
     private String cnpj;
 
-    @Column(name = "EMAIL")
+    @Column(name = "EMAIL", length = 100)
     private String email;
 
-    @Column(name = "SENHA")
+    @Column(name = "SENHA", length = 100)
     private String senha;
 
     @ManyToOne

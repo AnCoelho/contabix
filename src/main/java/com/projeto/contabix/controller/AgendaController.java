@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.projeto.contabix.data.dto.AgendaDTO;
+import com.projeto.contabix.data.dto.UsuariosDTO;
 import com.projeto.contabix.service.AgendaService;
 
 import io.swagger.annotations.ApiOperation;
@@ -27,4 +28,11 @@ public class AgendaController {
     public List<AgendaDTO> getEventsByMonth(@RequestParam String dateMonthYearFormatted) {
         return agendaService.getEventsByMonthAndYear(dateMonthYearFormatted);
     }
+
+    @GetMapping("/getNotifications")
+    @ApiOperation(value = "Busca as notificações para determinado user")
+    public List<AgendaDTO> getNotification(@RequestParam UsuariosDTO usuariosDTO) {
+        return agendaService.getEventsNotifications(usuariosDTO);
+    }
+    
 }

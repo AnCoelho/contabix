@@ -29,6 +29,18 @@ public class AgendaEntity {
     @JoinColumn(name = "ID_USUARIO")
     private UsuariosEntity usuario;
 
+    @ManyToOne
+    @JoinColumn(name = "ID_SOLICITACAO", nullable = true)
+    private SolicitacoesEntity solicitacao;
+
+    @ManyToOne
+    @JoinColumn(name = "ID_SOLICITANTE")
+    private UsuariosEntity solicitante;
+
+    @ManyToOne
+    @JoinColumn(name = "ID_DESTINATARIO")
+    private UsuariosEntity destinatario;
+
     @Column(name = "DESCRICAO")
     private String descricao;
 
