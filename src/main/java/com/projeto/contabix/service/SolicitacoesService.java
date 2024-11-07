@@ -26,21 +26,21 @@ public class SolicitacoesService {
     public List<SolicitacoesDTO> getSolicitacoesByCliente(UsuariosEntity idCliente) {
         List<SolicitacoesEntity> solicitacoesEntities = solicitacoesRepository.findByIdCliente(idCliente);
         return solicitacoesEntities.stream()
-                .map(entity -> ModelMapperUtils.map(entity, new SolicitacoesDTO()))
+                .map(entity -> ModelMapperUtils.map(entity, SolicitacoesDTO.class))
                 .collect(Collectors.toList());
     }
 
     public List<SolicitacoesDTO> getSolicitacoesByContador(UsuariosEntity idContador) {
         List<SolicitacoesEntity> solicitacoesEntities = solicitacoesRepository.findByIdContador(idContador);
         return solicitacoesEntities.stream()
-                .map(entity -> ModelMapperUtils.map(entity, new SolicitacoesDTO()))
+                .map(entity -> ModelMapperUtils.map(entity, SolicitacoesDTO.class))
                 .collect(Collectors.toList());
     }
 
     public List<SolicitacoesDTO> getAllSolicitacoesOrderedByStatus() {
         List<SolicitacoesEntity> solicitacoesEntities = solicitacoesRepository.findAllByOrderByStatusAsc();
         return solicitacoesEntities.stream()
-                .map(entity -> ModelMapperUtils.map(entity, new SolicitacoesDTO()))
+                .map(entity -> ModelMapperUtils.map(entity, SolicitacoesDTO.class))
                 .collect(Collectors.toList());
     }
 }

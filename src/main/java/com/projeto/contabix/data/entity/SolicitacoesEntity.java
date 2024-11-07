@@ -28,7 +28,6 @@ public class SolicitacoesEntity {
     @JoinColumn(name = "ID_CONTADOR", nullable = true)
     private UsuariosEntity idContador;
 
-
     @Column(name = "SERVICO")
     private String servico;
 
