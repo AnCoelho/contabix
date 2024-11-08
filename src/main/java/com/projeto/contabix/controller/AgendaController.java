@@ -10,9 +10,11 @@ import com.projeto.contabix.data.dto.UsuariosDTO;
 import com.projeto.contabix.service.AgendaService;
 
 import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
@@ -29,9 +31,9 @@ public class AgendaController {
         return agendaService.getEventsByMonthAndYear(dateMonthYearFormatted);
     }
 
-    @GetMapping("/getNotifications")
+    @PostMapping("/getNotifications")
     @ApiOperation(value = "Busca as notificações para determinado user")
-    public List<AgendaDTO> getNotification(@RequestParam UsuariosDTO usuariosDTO) {
+    public List<AgendaDTO> getNotification(@RequestBody UsuariosDTO usuariosDTO) {
         return agendaService.getEventsNotifications(usuariosDTO);
     }
     
