@@ -46,8 +46,14 @@ public class AgendaService {
 
     @Transactional
     public List<AgendaDTO> getEventsNotifications(UsuariosDTO usuariosDTO) {
-        List<AgendaEntity> notifications = agendaRepository.findAllByNotificadoAndSolicitante(false,
-                ModelMapperUtils.map(usuariosDTO, new UsuariosEntity()));
+        if (usuariosDTO.getIdUsuario() == null) {
+            throw new BusinessException("ID_USUARIO_NULO", "O ID do usuário é necessário para buscar notificações");
+        }
+
+        UsuariosEntity usuario = usuariosRepository.findById(usuariosDTO.getIdUsuario())
+                .orElseThrow(() -> new BusinessException("USUARIO_NAO_ENCONTRADO", "Usuário não encontrado"));
+
+        List<AgendaEntity> notifications = agendaRepository.findAllByNotificadoAndDestinatario(false, usuario);
         if (notifications.isEmpty()) {
             throw new BusinessException("SEM_NOTIFICACOES", "Você não possui nenhuma notificação no momento");
         }
@@ -64,11 +70,12 @@ public class AgendaService {
         LocalDate today = LocalDate.now();
         UsuariosEntity usuario = usuariosRepository.findById(idUsuario).get();
 
-        List<AgendaDTO> agendaDTOs = ModelMapperUtils.mapList(agendaRepository.findAllByDateAndUsuario(today, usuario), AgendaDTO.class);
+        List<AgendaDTO> agendaDTOs = ModelMapperUtils.mapList(agendaRepository.findAllByDateAndUsuario(today, usuario),
+                AgendaDTO.class);
 
         if (agendaDTOs.isEmpty() || agendaDTOs == null)
             throw new NotFoundException("404", "Não há eventos para hoje");
-        
+
         return agendaDTOs;
     }
 }

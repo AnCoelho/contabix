@@ -24,5 +24,5 @@ public interface AgendaRepository extends JpaRepository<AgendaEntity, Long> {
             @Param("data") LocalDate data,
             @Param("usuario") UsuariosEntity usuario);
 
-    List<AgendaEntity> findAllByNotificadoAndSolicitante(boolean notificado, UsuariosEntity usuariosEntity);
+    List<AgendaEntity> findAllByNotificadoAndDestinatario(boolean notificado, UsuariosEntity usuariosEntity);
 }
