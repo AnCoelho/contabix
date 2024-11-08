@@ -1,5 +1,6 @@
 package com.projeto.contabix.repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,8 +13,16 @@ import com.projeto.contabix.data.entity.UsuariosEntity;
 
 @Repository
 public interface AgendaRepository extends JpaRepository<AgendaEntity, Long> {
-    @Query("SELECT a FROM AgendaEntity a WHERE EXTRACT(MONTH FROM a.dataEvento) = :mes AND EXTRACT(YEAR FROM a.dataEvento) = :ano")
-    List<AgendaEntity> findAllByMonthAndYear(@Param("mes") Long mes, @Param("ano") Long ano);
+    @Query("SELECT a FROM AgendaEntity a WHERE EXTRACT(MONTH FROM a.dataEvento) = :mes AND EXTRACT(YEAR FROM a.dataEvento) = :ano AND a.usuario = :usuario")
+    List<AgendaEntity> findAllByMonthAndYearAndUsuario(
+            @Param("mes") Long mes,
+            @Param("ano") Long ano,
+            @Param("usuario") UsuariosEntity usuariosEntity);
+
+    @Query("SELECT a FROM AgendaEntity a WHERE a.dataEvento = :data AND a.usuario = :usuario")
+    List<AgendaEntity> findAllByDateAndUsuario(
+            @Param("data") LocalDate data,
+            @Param("usuario") UsuariosEntity usuario);
 
     List<AgendaEntity> findAllByNotificadoAndSolicitante(boolean notificado, UsuariosEntity usuariosEntity);
 }

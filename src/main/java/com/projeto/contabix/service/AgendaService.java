@@ -15,6 +15,7 @@ import com.projeto.contabix.data.entity.UsuariosEntity;
 import com.projeto.contabix.exception.BusinessException;
 import com.projeto.contabix.exception.NotFoundException;
 import com.projeto.contabix.repository.AgendaRepository;
+import com.projeto.contabix.repository.UsuariosRepository;
 import com.projeto.contabix.utils.ModelMapperUtils;
 
 @Service
@@ -22,24 +23,31 @@ public class AgendaService {
     @Autowired
     private AgendaRepository agendaRepository;
 
-    public List<AgendaDTO> getEventsByMonthAndYear(String mesAno) {
+    @Autowired
+    private UsuariosRepository usuariosRepository;
+
+    public List<AgendaDTO> getEventsByMonthAndYearAndUsuario(String mesAno, Long idUsuario) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         LocalDate data = LocalDate.parse("01/" + mesAno, formatter);
         Long mes = (long) data.getMonthValue();
         Long ano = (long) data.getYear();
 
-        List<AgendaDTO> agendaEntities = ModelMapperUtils.mapList(agendaRepository.findAllByMonthAndYear(mes, ano),
+        UsuariosEntity usuario = usuariosRepository.findById(idUsuario).get();
+
+        List<AgendaDTO> agendaDTOs = ModelMapperUtils.mapList(
+                agendaRepository.findAllByMonthAndYearAndUsuario(mes, ano, usuario),
                 AgendaDTO.class);
 
-        if (agendaEntities.isEmpty() || agendaEntities == null)
+        if (agendaDTOs.isEmpty() || agendaDTOs == null)
             throw new NotFoundException("404", "Não há eventos para esse mês");
 
-        return agendaEntities;
+        return agendaDTOs;
     }
 
     @Transactional
     public List<AgendaDTO> getEventsNotifications(UsuariosDTO usuariosDTO) {
-        List<AgendaEntity> notifications = agendaRepository.findAllByNotificadoAndSolicitante(false, ModelMapperUtils.map(usuariosDTO, new UsuariosEntity()));
+        List<AgendaEntity> notifications = agendaRepository.findAllByNotificadoAndSolicitante(false,
+                ModelMapperUtils.map(usuariosDTO, new UsuariosEntity()));
         if (notifications.isEmpty()) {
             throw new BusinessException("SEM_NOTIFICACOES", "Você não possui nenhuma notificação no momento");
         }
@@ -50,5 +58,17 @@ public class AgendaService {
         }
 
         return ModelMapperUtils.mapList(notifications, AgendaDTO.class);
+    }
+
+    public List<AgendaDTO> getEventsByActualDayAndUsuario(Long idUsuario) {
+        LocalDate today = LocalDate.now();
+        UsuariosEntity usuario = usuariosRepository.findById(idUsuario).get();
+
+        List<AgendaDTO> agendaDTOs = ModelMapperUtils.mapList(agendaRepository.findAllByDateAndUsuario(today, usuario), AgendaDTO.class);
+
+        if (agendaDTOs.isEmpty() || agendaDTOs == null)
+            throw new NotFoundException("404", "Não há eventos para hoje");
+        
+        return agendaDTOs;
     }
 }

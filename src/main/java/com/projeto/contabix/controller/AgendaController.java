@@ -26,13 +26,19 @@ public class AgendaController {
     private AgendaService agendaService;
 
     @GetMapping("/getEventsByMonth")
-    @ApiOperation(value = "Busca os eventos pelo mês e ano")
-    public List<AgendaDTO> getEventsByMonth(@RequestParam String dateMonthYearFormatted) {
-        return agendaService.getEventsByMonthAndYear(dateMonthYearFormatted);
+    @ApiOperation(value = "Busca os eventos pelo mês, ano e usuário")
+    public List<AgendaDTO> getEventsByMonth(@RequestParam String dateMonthYearFormatted, @RequestParam Long idUsuario) {
+        return agendaService.getEventsByMonthAndYearAndUsuario(dateMonthYearFormatted, idUsuario);
+    }
+
+    @GetMapping("/getTodayEventsByUser")
+    @ApiOperation(value = "Busca os eventos do dia atual pelo usuário")
+    public List<AgendaDTO> getEventsByActualDayAndUsuario(@RequestParam Long idUsuario) {
+        return agendaService.getEventsByActualDayAndUsuario(idUsuario);
     }
 
     @PostMapping("/getNotifications")
-    @ApiOperation(value = "Busca as notificações para determinado user")
+    @ApiOperation(value = "Busca as notificações para determinado usuário")
     public List<AgendaDTO> getNotification(@RequestBody UsuariosDTO usuariosDTO) {
         return agendaService.getEventsNotifications(usuariosDTO);
     }
