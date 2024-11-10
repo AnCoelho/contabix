@@ -1,6 +1,7 @@
 package com.projeto.contabix.service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -68,12 +69,17 @@ public class AgendaService {
 
     public List<AgendaDTO> getEventsByActualDayAndUsuario(Long idUsuario) {
         LocalDate today = LocalDate.now();
-        UsuariosEntity usuario = usuariosRepository.findById(idUsuario).get();
+        LocalDateTime startOfDay = today.atStartOfDay();
+        LocalDateTime endOfDay = today.atTime(23, 59, 59);
 
-        List<AgendaDTO> agendaDTOs = ModelMapperUtils.mapList(agendaRepository.findAllByDateAndUsuario(today, usuario),
+        UsuariosEntity usuario = usuariosRepository.findById(idUsuario)
+                .orElseThrow(() -> new NotFoundException("404", "Usuário não encontrado"));
+
+        List<AgendaDTO> agendaDTOs = ModelMapperUtils.mapList(
+                agendaRepository.findAllByDateRangeAndUsuario(startOfDay, endOfDay, usuario),
                 AgendaDTO.class);
 
-        if (agendaDTOs.isEmpty() || agendaDTOs == null)
+        if (agendaDTOs.isEmpty())
             throw new NotFoundException("404", "Não há eventos para hoje");
 
         return agendaDTOs;
