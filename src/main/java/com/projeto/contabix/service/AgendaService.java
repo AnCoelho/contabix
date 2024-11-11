@@ -84,4 +84,11 @@ public class AgendaService {
 
         return agendaDTOs;
     }
+
+    public AgendaDTO getEventById(Long idEvent) {
+        AgendaEntity agendaEntity = agendaRepository.findById(idEvent)
+                .orElseThrow(() -> new NotFoundException("404", "Usuário não encontrado"));
+
+        return ModelMapperUtils.map(agendaEntity, new AgendaDTO());
+    }
 }

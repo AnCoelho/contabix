@@ -42,5 +42,11 @@ public class AgendaController {
     public List<AgendaDTO> getNotification(@RequestBody UsuariosDTO usuariosDTO) {
         return agendaService.getEventsNotifications(usuariosDTO);
     }
+
+    @GetMapping("/getEventById")
+    @ApiOperation(value = "Busca os eventos pelo id")
+    public AgendaDTO getEventById(@RequestParam Long idEvent) {
+        return agendaService.getEventById(idEvent);
+    }
     
 }
