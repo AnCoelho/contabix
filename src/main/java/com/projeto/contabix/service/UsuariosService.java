@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -19,9 +20,6 @@ public class UsuariosService {
 
     @Autowired
     private UsuariosRepository usuariosRepository;
-
-    @Autowired
-    private TipoUsuarioRepository tipoUsuarioRepository;
 
     public UsuariosDTO findById(Long id) {
         UsuariosEntity usuariosEntity = usuariosRepository.findById(id)
@@ -70,8 +68,7 @@ public class UsuariosService {
         throw new BusinessException("ERRO_INESPERADO", "Houve um erro inesperado!");
     }
 
-    private TipoUsuarioEntity getTipoUsuario(Long idTipoUsuario) {
-        return tipoUsuarioRepository.findById(idTipoUsuario)
-                .orElseThrow(() -> new NotFoundException("TIPO_USUARIO_NOT_FOUND", "Tipo de Usuário não encontrado."));
+    public List<UsuariosDTO> findContadores() {
+        return ModelMapperUtils.mapList(usuariosRepository.findContadores(), UsuariosDTO.class);
     }
 }

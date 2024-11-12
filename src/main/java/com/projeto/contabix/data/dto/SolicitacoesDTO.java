@@ -10,8 +10,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class SolicitacoesDTO {
     private Long idSolicitacao;
-    private Long idCliente;
-    private Long idContador;
+    private UsuariosDTO cliente;
+    private UsuariosDTO contador;
     private String servico;
     private String urgencia;
     private LocalDateTime prazo;

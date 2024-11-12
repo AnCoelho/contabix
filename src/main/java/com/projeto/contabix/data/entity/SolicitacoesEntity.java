@@ -21,11 +21,11 @@ public class SolicitacoesEntity {
 
     @ManyToOne
     @JoinColumn(name = "ID_CLIENTE", nullable = false)
-    private UsuariosEntity idCliente;
+    private UsuariosEntity cliente;
 
     @ManyToOne
     @JoinColumn(name = "ID_CONTADOR", nullable = true)
-    private UsuariosEntity idContador;
+    private UsuariosEntity contador;
 
     @Column(name = "SERVICO", length = 50, nullable = false)
     private String servico;
