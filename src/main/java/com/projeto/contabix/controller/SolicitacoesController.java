@@ -21,8 +21,8 @@ public class SolicitacoesController {
         return solicitacoesService.createSolicitation(solicitation);
     }
 
-    @GetMapping("/getSolicitationsByUser")
-    public List<SolicitacoesDTO> getSolicitationsByUser(@RequestBody UsuariosEntity cliente) {
-        return solicitacoesService.getSolicitationsByUser(cliente);
+    @PostMapping("/getSolicitationsByUser")
+    public List<SolicitacoesDTO> getSolicitationsByUser(@RequestBody UsuariosEntity contador) {
+        return solicitacoesService.getSolicitationsByUser(contador);
     }
 }

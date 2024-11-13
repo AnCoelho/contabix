@@ -13,11 +13,11 @@ import com.projeto.contabix.data.entity.UsuariosEntity;
 
 @Repository
 public interface AgendaRepository extends JpaRepository<AgendaEntity, Long> {
-        @Query("SELECT a FROM AgendaEntity a WHERE EXTRACT(MONTH FROM a.dataEvento) = :mes AND EXTRACT(YEAR FROM a.dataEvento) = :ano AND a.usuario = :usuario")
+        @Query("SELECT a FROM AgendaEntity a WHERE EXTRACT(MONTH FROM a.dataEvento) = :mes AND EXTRACT(YEAR FROM a.dataEvento) = :ano AND a.destinatario = :destinatario")
         List<AgendaEntity> findAllByMonthAndYearAndUsuario(
                         @Param("mes") Long mes,
                         @Param("ano") Long ano,
-                        @Param("usuario") UsuariosEntity usuariosEntity);
+                        @Param("destinatario") UsuariosEntity usuariosEntity);
 
         @Query("SELECT a FROM AgendaEntity a WHERE a.dataEvento BETWEEN :startOfDay AND :endOfDay AND a.usuario = :usuario")
         List<AgendaEntity> findAllByDateRangeAndUsuario(

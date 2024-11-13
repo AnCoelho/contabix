@@ -42,12 +42,12 @@ public class SolicitacoesService {
         return ModelMapperUtils.map(savedSolicitation, new SolicitacoesDTO());
     }
 
-    public List<SolicitacoesDTO> getSolicitationsByUser(UsuariosEntity cliente) {
-        if (cliente == null || cliente.getIdUsuario() == null) {
+    public List<SolicitacoesDTO> getSolicitationsByUser(UsuariosEntity contador) {
+        if (contador.getIdUsuario() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cliente inválido.");
         }
 
-        return ModelMapperUtils.mapList(solicitacoesRepository.findByCliente(cliente), SolicitacoesDTO.class);
+        return ModelMapperUtils.mapList(solicitacoesRepository.findByContador(contador), SolicitacoesDTO.class);
     }
 
     private void validateSolicitation(SolicitacoesEntity solicitation) {
@@ -74,7 +74,7 @@ public class SolicitacoesService {
         agendaEvent.setSolicitacao(solicitation);
         agendaEvent.setSolicitante(solicitation.getCliente());
         agendaEvent.setDestinatario(solicitation.getContador());
-        agendaEvent.setDescricao("Novo evento criado para a solicitação " + solicitation.getIdSolicitacao());
+        agendaEvent.setDescricao(solicitation.getAssunto() + " - " + solicitation.getDescricao());
 
         LocalDateTime eventDateTime = solicitation.getPrazo();
         Date eventDate = Date.valueOf(eventDateTime.toLocalDate());

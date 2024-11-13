@@ -11,5 +11,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface SolicitacoesRepository extends JpaRepository<SolicitacoesEntity, Long> {
-    List<SolicitacoesEntity> findByCliente(UsuariosEntity cliente);
+    List<SolicitacoesEntity> findByContador(UsuariosEntity contador);
 }
